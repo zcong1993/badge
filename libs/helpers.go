@@ -6,7 +6,9 @@ var verdana = []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 func CacWith(str string) float64 {
 	verdana[64] += 0.6
 	total := 0.0
+
 	s := []rune(str)
+
 	for i := len(s) - 1; i >= 0; i-- {
 		code := s[i]
 		if code >= 127 {
