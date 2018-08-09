@@ -44,7 +44,7 @@ func Badgen(input Input) ([]byte, error) {
 	width := sbRectWidth + stRectWidth
 	c, ok := libs.COLORS[input.Color]
 	if !ok {
-		c = libs.COLORS["blue"]
+		c = input.Color
 	}
 
 	data := TplData{
