@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/zcong1993/badge/libs"
 	"github.com/zcong1993/badge/tpl"
+	"strings"
 )
 
 const (
@@ -11,6 +12,8 @@ const (
 	DEFAULT = iota + 1
 	// FLAT is flat style
 	FLAT
+	// FOR THE BADGE
+	FOR_THE_BADGE
 )
 
 // Input is Badgen input struct
@@ -37,6 +40,10 @@ var templ = tpl.NewTPL()
 
 // Badgen is the api we expose
 func Badgen(input Input) ([]byte, error) {
+	if input.Style == FOR_THE_BADGE {
+		input.Subject = strings.ToUpper(input.Subject)
+		input.Status = strings.ToUpper(input.Status)
+	}
 	sbTextWidth := libs.CacWith(input.Subject)
 	stTextWidth := libs.CacWith(input.Status)
 	sbRectWidth := sbTextWidth + 10.2
@@ -62,6 +69,15 @@ func Badgen(input Input) ([]byte, error) {
 	t := templ.DefaultTpl
 	if input.Style == FLAT {
 		t = templ.FlatTpl
+	}
+	if input.Style == FOR_THE_BADGE {
+		data.SbRectWidth += 10 + float64(len(data.Subject))*1.5
+		data.StRectWidth += 10 + float64(len(data.Status))*2
+		data.Width = data.SbRectWidth + data.StRectWidth
+		if data.Color == "" {
+			data.Color = "97CA00"
+		}
+		t = templ.ForTheBadgeTpl
 	}
 	err := t.Execute(&bf, data)
 	if err != nil {
